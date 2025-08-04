@@ -34,18 +34,17 @@
   }
   
   .theme-toggle img {
-    width: 80px;
-    height: 80px;
+    width: 50px;
+    height: 50px;
     cursor: pointer;
     transition: filter 0.4s ease, transform 0.4s ease, opacity 0.3s ease;
   }
   
-  /* 필터만 적용 (회전은 JS에서 관리) */
   body.dark-mode .theme-toggle img {
     filter: invert(1) brightness(1.2) contrast(1.2);
   }
   
-  /* 셀렉터 박스 */
+  /* 셀렉터 */
   .selector {
     width: 80%;
     height: 60vh;
@@ -73,12 +72,11 @@
     filter: brightness(80%);
   }
   
-  .form-select:active,
-  .option:active,
-  .close-btn:active {
+  .pressed {
     transform: translateY(2px) scale(0.98);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     filter: brightness(80%);
+    transition: all 0.1s ease;
   }
   
   /* 팝업 오버레이 */
@@ -95,7 +93,7 @@
     z-index: 999;
   }
   
-  /* 팝업 본체 */
+  /* 팝업 */
   .popup-select {
     background: var(--popup-bg);
     padding: 30px;
@@ -107,7 +105,6 @@
     color: var(--text-color);
   }
   
-  /* 옵션 버튼 */
   .popup-select .option {
     padding: 15px;
     margin: 8px 0;
@@ -134,7 +131,7 @@
     cursor: pointer;
   }
   
-  /* ✅ 모바일 터치 피드백 제거 */
+  /* ✅ 모바일 클릭 잔상 제거 */
   * {
     -webkit-tap-highlight-color: transparent;
     -webkit-touch-callout: none;
