@@ -133,4 +133,10 @@ body.dark-mode .theme-toggle img {
   border: none;
   border-radius: 7px;
   cursor: pointer;
+}
+
+* {
+  -webkit-tap-highlight-color: transparent; /* iOS 사파리 등 */
+  -webkit-touch-callout: none; /* 길게 눌렀을 때 메뉴 방지 (iOS) */
+  outline: none;
 }/*# sourceMappingURL=main.css.map */
