@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>다크모드 전환</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="main-header">
+    <div class="subtitle">고등창의과학톤</div>
+    <img src="import.png" alt="중요한" class="main-image">
+    <div class="main-title">THSS</div>
+    <div class="main-description">Types of Hate Speech by School</div>
+  </div>
+
+  <!-- 🌙 다크모드 토글 -->
+  <div class="theme-toggle">
+    <img id="modeIcon" src="moon.png" alt="모드 전환 아이콘">
+  </div>
+
+  <!-- 셀렉터 버튼 -->
+  <div class="selector">
+    <button id="openSelectBtn" class="form-select">학교 선택</button>
+  </div>
+
+  <!-- 팝업 -->
+  <div class="popup-overlay" style="display: none;">
+    <div class="popup-select">
+      <div class="option" data-value="1">한국디지털미디어고등학교</div>
+      <div class="option" data-value="2">Two</div>
+      <div class="option" data-value="3">Three</div>
+      <div class="option" data-value="4">Four</div>
+      <div class="option" data-value="5">Five</div>
+      <button id="closePopup" class="close-btn">닫기</button>
+    </div>
+  </div>
+
+  <div class="logo-list">
+    <img src="dimi.png" alt="디미고" class="logo">
+    <img src="jowon.png" alt="조원고" class="logo">
+    <img src="scienceinfo.png" alt="과기정통부" class="logo">
+    <img src="kungki.png" alt="경기도" class="logo">
+    <img src="kungkieco.png" alt="경기도경제과학진흥원" class="logo">
+    <img src="korinfo.png" alt="한국정보과학진흥협회" class="logo">
+    <img src="infotrans.png" alt="정보통신산업진흥원" class="logo">
+    <img src="sung.png" alt="성균관대" class="logo">
+  </div>
+
+  <script>
+    const openBtn = document.getElementById('openSelectBtn');
+    const popup = document.querySelector('.popup-overlay');
+    const options = document.querySelectorAll('.option');
+    const closeBtn = document.getElementById('closePopup');
+    const modeIcon = document.getElementById('modeIcon');
+
+    let rotation = 0;
+
+    openBtn.addEventListener('click', () => {
+      popup.style.display = 'flex';
+    });
+
+    closeBtn.addEventListener('click', () => {
+      popup.style.display = 'none';
+    });
+
+    options.forEach(opt => {
+      opt.addEventListener('click', () => {
+        openBtn.textContent = opt.textContent;
+        popup.style.display = 'none';
+      });
+    });
+
+    modeIcon.addEventListener('click', () => {
+      const isDark = document.body.classList.toggle('dark-mode');
+      rotation += 180;
+      modeIcon.style.transform = `rotate(${rotation}deg)`;
+      modeIcon.style.opacity = '0';
+      setTimeout(() => {
+        modeIcon.src = isDark ? 'sun.png' : 'moon.png';
+        modeIcon.style.opacity = '1';
+      }, 150);
+    });
+
+    const pressables = document.querySelectorAll('.form-select, .option, .close-btn');
+    pressables.forEach(el => {
+      el.addEventListener('touchstart', () => {
+        el.classList.add('pressed');
+      });
+      el.addEventListener('touchend', () => {
+        setTimeout(() => {
+          el.classList.remove('pressed');
+        }, 120);
+      });
+    });
+  </script>
+</body>
+</html>
