@@ -27,14 +27,13 @@
     font-family: sans-serif;
     transition: background-color 0.3s ease, color 0.3s ease;
   }
-
+  
   .main-header {
     position: relative;
     text-align: center;
     padding: 10px;
   }
   
-  /* 작은 제목 */
   .subtitle {
     font-size: 14px;
     font-weight: 400;
@@ -42,7 +41,6 @@
     opacity: 0.7;
   }
   
-  /* 중앙에 이미지 */
   .main-image {
     position: absolute;
     top: 10px;
@@ -51,12 +49,11 @@
     width: 120px;
     height: auto;
   }
-
-  body.dark-mode .main-image {
-  filter: invert(1) brightness(1.2) contrast(1.2);
-}
   
-  /* 중앙에 큰 제목 */
+  body.dark-mode .main-image {
+    filter: invert(1) brightness(1.2) contrast(1.2);
+  }
+  
   .main-title {
     position: absolute;
     top: 110px;
@@ -67,7 +64,6 @@
     color: var(--text-color);
   }
   
-  /* 중앙에 설명 텍스트 */
   .main-description {
     width: 80%;
     position: absolute;
@@ -80,7 +76,6 @@
     opacity: 0.9;
   }
   
-  /* 🌙 다크모드 토글 버튼 */
   .theme-toggle {
     position: fixed;
     top: 15px;
@@ -99,17 +94,23 @@
     filter: invert(1) brightness(1.2) contrast(1.2);
   }
   
+  /* ✅ 수정된 위치 조정 부분 */
   .selector {
-    position: relative; /* 고정 위치 제거 */
+    position: relative;
     width: 100%;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-    margin: 200px auto 40px; /* 텍스트 아래로 자연스럽게 내려옴 */
+    margin: 120px auto 30px;
     height: auto;
-    z-index: 1; /* 필요 시 조절 */
+    z-index: 1;
+    gap: 16px;
   }
   
+  #labelButtons {
+    margin-top: 10px !important;
+  }
   
   .form-select {
     font-size: 23px;
@@ -136,7 +137,6 @@
     transition: all 0.1s ease;
   }
   
-  /* 팝업 오버레이 */
   .popup-overlay {
     position: fixed;
     top: 0;
@@ -150,7 +150,6 @@
     z-index: 999;
   }
   
-  /* 팝업 */
   .popup-select {
     background: var(--popup-bg);
     padding: 30px;
@@ -177,7 +176,6 @@
     background-color: var(--option-hover);
   }
   
-  /* 닫기 버튼 */
   .close-btn {
     margin-top: 20px;
     padding: 10px 20px;
@@ -188,7 +186,6 @@
     cursor: pointer;
   }
   
-  /* ✅ 모바일 클릭 잔상 제거 */
   * {
     -webkit-tap-highlight-color: transparent;
     -webkit-touch-callout: none;
@@ -209,7 +206,7 @@
     justify-content: center;
     gap: 12px;
     padding: 20px 10px;
-    background-color: var(--bg-color); /* 스크롤 시 가려지지 않도록 */
+    background-color: var(--bg-color);
     z-index: 1;
   }
   
@@ -224,5 +221,4 @@
   .logo:hover {
     transform: scale(2);
   }
-  
   
