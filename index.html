@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>다크모드 전환</title>
   <link rel="stylesheet" href="main.css" />
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 </head>
 <body>
   <div class="main-header">
@@ -13,27 +14,38 @@
     <div class="main-title">THSS</div>
     <div class="main-description">Types of Hate Speech by School</div>
   </div>
-  
-  <!-- 🌙 다크모드 토글 -->
+
   <div class="theme-toggle">
     <img id="modeIcon" src="moon.png" alt="모드 전환 아이콘">
   </div>
 
-  <!-- 셀렉터 버튼 -->
   <div class="selector">
     <button id="openSelectBtn" class="form-select">학교 선택</button>
   </div>
 
-  <!-- 팝업 -->
   <div class="popup-overlay" style="display: none;">
     <div class="popup-select">
-      <div class="option" data-value="1">한국디지털미디어고등학교</div>
-      <div class="option" data-value="2">Two</div>
-      <div class="option" data-value="3">Three</div>
-      <div class="option" data-value="4">Four</div>
-      <div class="option" data-value="5">Five</div>
+      <div class="option">수성고</div>
+      <div class="option">광동고</div>
+      <div class="option">삼일공고</div>
+      <div class="option">덕영고</div>
+      <div class="option">태광고</div>
+      <div class="option">동탄국제고</div>
+      <div class="option">동원동우고</div>
+      <div class="option">조원고</div>
+      <div class="option">수원정보과학고</div>
+      <div class="option">서천고</div>
+      <div class="option">평촌경영고</div>
+      <div class="option">백운고</div>
+      <div class="option">한국디지털미디어고</div>
+      <div class="option">안양문화고</div>
+      <div class="option">성균관대학교</div>
       <button id="closePopup" class="close-btn">닫기</button>
     </div>
+  </div>
+
+  <div id="labelButtons" class="selector" style="display: none; flex-direction: column; gap: 10px;">
+    <div style="color: var(--text-color); font-size: 18px;">데이터 불러오는 중...</div>
   </div>
 
   <div class="logo-list">
@@ -47,15 +59,44 @@
     <img src="sung.png" alt="성균관대" class="logo">
   </div>
 
-  <!-- JS -->
   <script>
     const openBtn = document.getElementById('openSelectBtn');
     const popup = document.querySelector('.popup-overlay');
     const options = document.querySelectorAll('.option');
     const closeBtn = document.getElementById('closePopup');
     const modeIcon = document.getElementById('modeIcon');
+    const labelButtonContainer = document.getElementById('labelButtons');
 
     let rotation = 0;
+
+    const labelMap = {
+      LABEL_1: "여성/가족",
+      LABEL_2: "남성",
+      LABEL_3: "성소수자",
+      LABEL_4: "인종/국적",
+      LABEL_5: "연령",
+      LABEL_6: "지역",
+      LABEL_7: "종교",
+      LABEL_8: "기타 혐오",
+      LABEL_9: "악플/욕설",
+      LABEL_10: "clean",
+      LABEL_11: "개인지칭 ",
+      LABEL_12: "장애"
+    };
+
+    const labelLinks = {
+      LABEL_1: "https://www.youtube.com/watch?v=atjLe8azVys",
+      LABEL_2: "https://www.youtube.com/watch?v=atjLe8azVys",
+      LABEL_3: "https://www.youtube.com/watch?v=C8F5mi2oNsc",
+      LABEL_4: "https://www.youtube.com/watch?v=z4ftwz1Sn5s",
+      LABEL_5: "https://www.youtube.com/watch?v=SYa7xbONn-I",
+      LABEL_6: "https://www.youtube.com/watch?v=o0VfeVSQKq0",
+      LABEL_7: "https://www.youtube.com/watch?v=YtV8XyDHqi4",
+      LABEL_8: "https://www.youtube.com/watch?v=EL--naoX1KQ",
+      LABEL_9: "https://www.youtube.com/watch?v=AjPrpku-7U0",
+      LABEL_11: "https://www.youtube.com/watch?v=f5vgc9apIrI",
+      LABEL_12: "https://www.youtube.com/watch?v=uBbNNqumoQs"
+    };
 
     openBtn.addEventListener('click', () => {
       popup.style.display = 'flex';
@@ -63,13 +104,6 @@
 
     closeBtn.addEventListener('click', () => {
       popup.style.display = 'none';
-    });
-
-    options.forEach(opt => {
-      opt.addEventListener('click', () => {
-        openBtn.textContent = opt.textContent;
-        popup.style.display = 'none';
-      });
     });
 
     modeIcon.addEventListener('click', () => {
@@ -83,19 +117,68 @@
       }, 150);
     });
 
-    // ✅ 모바일에서도 눌림 효과 보이게 하는 처리
-    const pressables = document.querySelectorAll('.form-select, .option, .close-btn');
-    pressables.forEach(el => {
-      el.addEventListener('touchstart', () => {
-        el.classList.add('pressed');
+    const analyzeTopLabels = (data) => {
+      const counts = {};
+      data.forEach(row => {
+        const label = row["글_라벨"];
+        if (!label || label === "clean") return;
+        if (!label.startsWith("LABEL_")) return;
+        counts[label] = (counts[label] || 0) + 1;
       });
-      el.addEventListener('touchend', () => {
-        setTimeout(() => {
-          el.classList.remove('pressed');
-        }, 120);
+      return Object.entries(counts)
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 3)
+        .map(([label, count]) => ({
+          label,
+          name: labelMap[label] || label,
+          count
+        }));
+    };
+
+    const showLabelButtons = (topLabels) => {
+      labelButtonContainer.innerHTML = '';
+      topLabels.forEach((item, idx) => {
+        const btn = document.createElement('button');
+        btn.className = 'form-select';
+        btn.textContent = `${idx + 1}. ${item.name} (${item.count}회)`;
+        btn.addEventListener('click', () => {
+          const url = labelLinks[item.label];
+          if (url) {
+            window.open(url, '_blank');
+          } else {
+            alert('링크가 등록되지 않은 라벨입니다.');
+          }
+        });
+        labelButtonContainer.appendChild(btn);
+      });
+      labelButtonContainer.style.display = 'flex';
+    };
+
+    const loadAndAnalyzeCSV = (filename) => {
+      labelButtonContainer.style.display = 'flex';
+      labelButtonContainer.innerHTML = `<div style="color: var(--text-color); font-size: 18px;">데이터 불러오는 중...</div>`;
+      Papa.parse(filename, {
+        download: true,
+        header: true,
+        complete: function(results) {
+          const topLabels = analyzeTopLabels(results.data);
+          showLabelButtons(topLabels);
+        },
+        error: function(err) {
+          labelButtonContainer.innerHTML = `<div style="color: red;">CSV 로드 실패: ${err.message}</div>`;
+        }
+      });
+    };
+
+    options.forEach(opt => {
+      opt.addEventListener('click', () => {
+        const schoolName = opt.textContent.trim();
+        openBtn.textContent = schoolName;
+        popup.style.display = 'none';
+        const filename = `${schoolName}.csv`;
+        loadAndAnalyzeCSV(filename);
       });
     });
   </script>
-
 </body>
 </html>
