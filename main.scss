@@ -99,14 +99,14 @@
   }
   
   .selector {
-    position: fixed;
-    top: 200px; /* 원하는 위치로 조절 가능 */
-    left: 70%; /* 정중앙 기준 */
-    transform: translateX(-50%);
-    width: 80%;
-    height: auto; /* 버튼 높이에 맞게 자동 조정 */
-    padding: 10px;
-    background-color: transparent; /* 필요 시 배경 투명 */
+    position: relative; /* 고정 위치 제거 */
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 200px auto 40px; /* 텍스트 아래로 자연스럽게 내려옴 */
+    height: auto;
+    z-index: 1; /* 필요 시 조절 */
   }
   
   
