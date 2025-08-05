@@ -59,7 +59,7 @@
   /* 중앙에 큰 제목 */
   .main-title {
     position: absolute;
-    top: 120px;
+    top: 110px;
     left: 50%;
     transform: translateX(-50%);
     font-size: 36px;
@@ -99,17 +99,20 @@
   }
   
   .selector {
-    position: fixed; /* ← 이걸로 변경 */
-    top: 40px;
-    left: 70%;
+    position: fixed;
+    top: 200px; /* 원하는 위치로 조절 가능 */
+    left: 50%; /* 정중앙 기준 */
     transform: translateX(-50%);
     width: 80%;
-    height: 60vh;
+    height: auto; /* 버튼 높이에 맞게 자동 조정 */
     display: flex;
+    justify-content: center;
     align-items: center;
-    margin: 0 auto;
-    z-index: 998; /* 팝업보다 뒤로 */
+    z-index: 998;
+    padding: 10px;
+    background-color: transparent; /* 필요 시 배경 투명 */
   }
+  
   
   .form-select {
     font-size: 23px;
@@ -199,14 +202,18 @@
     appearance: none;
   }
   
-  /* ✅ 로고 섹션 - 반응형 */
   .logo-list {
-    margin-top: 100%;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     gap: 12px;
-    padding: 20px 10px 60px;
+    padding: 20px 10px;
+    background-color: var(--bg-color); /* 스크롤 시 가려지지 않도록 */
+    z-index: 1;
   }
   
   .logo {
